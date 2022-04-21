@@ -45,6 +45,7 @@ namespace negocios2022.Controllers
                     }
 
                     dataReader.Close();
+                    connection.Close();
                 }
                 catch (InvalidOperationException ioe)
                 {
@@ -90,9 +91,28 @@ namespace negocios2022.Controllers
         }
 
         [HttpPost]
-        public int Registrar(Producto producto)
+        public ActionResult Registrar(Producto producto)
         {
-            return 1;
+            int result = 0;
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand("INSERT INTO", connection);
+
+                try
+                {
+                    connection.Open();
+
+                    result = command.ExecuteNonQuery();
+
+                    connection.Close();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("There was an error with the connection.");
+                }
+            }
+                return RedirectToAction("Registrar");
         }
 
         [HttpPost]

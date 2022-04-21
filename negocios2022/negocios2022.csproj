@@ -175,6 +175,9 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Producto\Listar.cshtml" />
+    <Content Include="Views\Producto\Registrar.cshtml" />
+    <Content Include="Views\Producto\Actualizar.cshtml" />
+    <Content Include="Views\Producto\Eliminar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
