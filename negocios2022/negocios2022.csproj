@@ -121,6 +121,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ProductoCategoriaController.cs" />
     <Compile Include="Controllers\ProductoController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -133,6 +134,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\ProductoCategoria.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -178,6 +180,10 @@
     <Content Include="Views\Producto\Registrar.cshtml" />
     <Content Include="Views\Producto\Actualizar.cshtml" />
     <Content Include="Views\Producto\Eliminar.cshtml" />
+    <Content Include="Views\ProductoCategoria\_ListarProductos.cshtml" />
+    <Content Include="Views\ProductoCategoria\_ListarCategorias.cshtml" />
+    <Content Include="Views\ProductoCategoria\Listar.cshtml" />
+    <Content Include="Views\Producto\ListarPorCategoria.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

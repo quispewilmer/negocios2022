@@ -1,0 +1,10 @@
+﻿@model negocios2022.ViewModel.ProductoCategoria
+
+@{
+    ViewBag.Title = "Listar";
+}
+
+<h2>Listar</h2>
+
+@{ Html.RenderPartial("_ListarCategorias", Model.listaCategorias); }
+@{ Html.RenderPartial("_ListarProductos", Model.listaProductos); }
