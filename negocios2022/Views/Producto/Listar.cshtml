@@ -59,9 +59,8 @@
             @Html.DisplayFor(modelItem => item.unidadesExistencia)
         </td>
         <td>
-            @Html.ActionLink("Editar", "Actualizar", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Detalles", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Eliminar", "Eliminar", new { /* id=item.PrimaryKey */ })
+            @Html.ActionLink("Editar", "Actualizar", new { idProducto=item.idProducto }) |
+            @Html.ActionLink("Eliminar", "Eliminar", new { idProducto = item.idProducto })
         </td>
     </tr>
 }

@@ -69,7 +69,7 @@
 
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm("Eliminar", "Producto", new { idProducto = Model.idProducto })) {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">

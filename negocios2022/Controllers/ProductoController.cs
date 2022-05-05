@@ -25,19 +25,25 @@ namespace negocios2022.Controllers
         [HttpGet]
         public ActionResult Registrar()
         {
+            ViewBag.ProductoCantidad = listarProductos().Count() + 1;
+
             return View();
         }
 
         [HttpGet]
-        public ActionResult Actualizar()
+        public ActionResult Actualizar(int idProducto)
         {
-            return View();
+            Producto producto = listarProductos().Find(x => x.idProducto == idProducto);
+
+            return View(producto);
         }
 
         [HttpGet]
-        public ActionResult Eliminar()
+        public ActionResult Eliminar(int idProducto)
         {
-            return View();
+            Producto producto = listarProductos().Find(x => x.idProducto == idProducto);
+
+            return View(producto);
         }
 
         [HttpGet]
@@ -61,7 +67,7 @@ namespace negocios2022.Controllers
         public ActionResult ListarPorCategoria(string ListaCategorias)
         {
             List<SelectListItem> items = new List<SelectListItem>();
-            List<Producto> listaProductos = !ListaCategorias.Equals("") 
+            List<Producto> listaProductos = !ListaCategorias.Equals("")
                 ? listarProductosPorCategoria(ListaCategorias)
                 : listarProductos();
 
@@ -78,40 +84,26 @@ namespace negocios2022.Controllers
         [HttpPost]
         public ActionResult Registrar(Producto producto)
         {
-            int result = 0;
+            int result = registrarProducto(producto);
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                SqlCommand command = new SqlCommand("INSERT INTO", connection);
-
-                try
-                {
-                    connection.Open();
-
-                    result = command.ExecuteNonQuery();
-
-                    connection.Close();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("There was an error with the connection.");
-                }
-            }
-            return RedirectToAction("Registrar");
+            return RedirectToAction("Listar");
         }
 
         [HttpPost]
-        public int Actualizar(Producto producto)
+        public ActionResult Actualizar(Producto producto)
         {
-            return 1;
+            int result = actualizarProducto(producto);
+
+            return RedirectToAction("Listar");
         }
 
         [HttpPost]
-        public int Eliminar(int idProducto)
+        public ActionResult Eliminar(Producto producto)
         {
-            return 1;
-        }
+            int result = eliminarProducto(producto.idProducto);
 
+            return RedirectToAction("Listar");
+        }
         private List<Categoria> listarCategorias()
         {
             List<Categoria> listaCategorias = new List<Categoria>();
@@ -124,7 +116,7 @@ namespace negocios2022.Controllers
                     {
                         connection.Open();
                         SqlDataReader dataReader = command.ExecuteReader();
-                    
+
                         while (dataReader.Read())
                         {
                             Categoria categoria = new Categoria()
@@ -298,6 +290,133 @@ namespace negocios2022.Controllers
             }
 
             return productos;
+        }
+
+        private int registrarProducto(Producto producto)
+        {
+            int result = 0;
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                using (SqlCommand command = new SqlCommand(
+                    "INSERT INTO tb_productos(IdProducto, NombreProducto, IdProveedor, IdCategoria, umedida, PrecioUnidad, UnidadesEnExistencia) " +
+                    "VALUES (@Id, @Nombre, @IdProveedor, @IdCategoria, @UMedida, @PrecioUnidad, @UnidadesExistencia)", connection))
+                {
+                    command.Parameters.AddWithValue("@Id", producto.idProducto);
+                    command.Parameters.AddWithValue("@Nombre", producto.nombreProducto);
+                    command.Parameters.AddWithValue("@IdProveedor", producto.idProveedor);
+                    command.Parameters.AddWithValue("@IdCategoria", producto.idCategoria);
+                    command.Parameters.AddWithValue("@UMedida", producto.unidadMedida);
+                    command.Parameters.AddWithValue("@PrecioUnidad", producto.precioUnidad);
+                    command.Parameters.AddWithValue("@UnidadesExistencia", producto.unidadesExistencia);
+
+                    try
+                    {
+                        connection.Open();
+
+                        result = command.ExecuteNonQuery();
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+                    finally
+                    {
+                        try
+                        {
+                            connection.Close();
+                        }
+                        catch (Exception e)
+                        {
+
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        private int actualizarProducto(Producto producto)
+        {
+            int result = 0;
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                using (SqlCommand command = new SqlCommand("UPDATE tb_productos " +
+                    "SET NombreProducto = @Nombre, IdProveedor = @IdProveedor, IdCategoria = @IdCategoria, umedida = @UMedida, PrecioUnidad = @Precio, UnidadesEnExistencia = @UExistencia " +
+                    "WHERE IdProducto = @IdProducto", connection))
+                {
+                    command.Parameters.AddWithValue("@IdProducto", producto.idProducto);
+                    command.Parameters.AddWithValue("@Nombre", producto.nombreProducto);
+                    command.Parameters.AddWithValue("@IdProveedor", producto.idProveedor);
+                    command.Parameters.AddWithValue("@IdCategoria", producto.idCategoria);
+                    command.Parameters.AddWithValue("@UMedida", producto.unidadMedida);
+                    command.Parameters.AddWithValue("@Precio", producto.precioUnidad);
+                    command.Parameters.AddWithValue("@UExistencia", producto.unidadesExistencia);
+
+                    try
+                    {
+                        connection.Open();
+
+                        result = command.ExecuteNonQuery();
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+                    finally
+                    {
+                        try
+                        {
+                            connection.Close();
+                        }
+                        catch (Exception e)
+                        {
+
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        private int eliminarProducto(int idProducto)
+        {
+            int result = 0;
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                using (SqlCommand command = new SqlCommand("DELETE FROM tb_productos WHERE IdProducto = @Id", connection))
+                {
+                    command.Parameters.AddWithValue("@Id", idProducto);
+
+                    try
+                    {
+                        connection.Open();
+
+                        result = command.ExecuteNonQuery();
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+                    finally
+                    {
+                        try
+                        {
+                            connection.Close();
+                        }
+                        catch (Exception e)
+                        {
+
+                        }
+                    }
+                }
+            }
+
+                return result;
         }
     }
 }
